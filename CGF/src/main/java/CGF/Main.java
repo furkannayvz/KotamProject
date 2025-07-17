@@ -28,6 +28,7 @@ public class Main {
             for(records<key,value> record: records) {
                 Message_name x = record.value();
                 //gelen mesaji, oracle veritabanina da yazmaliyim..
+                Oracle.callInsertProcedure(x);
             }
             //key= id gibi
             //value= mesajin içerigi
