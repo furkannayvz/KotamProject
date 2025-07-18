@@ -1,0 +1,28 @@
+package com.i2i.intern.kotam.aom.constant;
+
+public class OracleQueries {
+
+    public static final String IS_CUSTOMER_ALREADY_EXISTS = "SELECT COUNT(*) FROM CUSTOMER WHERE MSISDN = ? OR EMAIL = ? OR TC_NO = ?";
+
+    public static final String SELECT_PASSWORD = "SELECT PASSWORD FROM CUSTOMER WHERE MSISDN = ?";
+
+    public static final String SELECT_CUSTOMER_ID = "SELECT cust_id_sequence.CURRVAL FROM dual";
+
+    public static final String SELECT_USER_ID = "SELECT MAX(ID) FROM USERS";
+
+    public static final String GET_BALANCE_BY_MSISDN = "SELECT BALANCE_MINUTES, BALANCE_SMS, BALANCE_DATA, BALANCE_MONEY FROM BALANCE WHERE MSISDN = ?";
+
+    public static final String UPDATE_BALANCE = "UPDATE BALANCE SET BALANCE_MINUTES = ?, BALANCE_SMS = ?, BALANCE_DATA = ?, BALANCE_MONEY = ? WHERE MSISDN = ?";
+
+    public static final String SELECT_PACKAGE_DETAILS = "SELECT AMOUNT_MINUTES, AMOUNT_SMS, AMOUNT_DATA, PERIOD FROM PACKAGE WHERE PACKAGE_NAME = ?";
+
+    public static final String SELECT_ALL_PACKAGES = "SELECT * FROM PACKAGE WHERE STATUS = 'ACTIVE'";
+
+    public static final String CHECK_CUSTOMER_EXISTS = "SELECT COUNT(*) FROM CUSTOMER WHERE EMAIL = ? AND TC_NO = ?";
+
+    public static final String SELECT_CUSTOMER_BY_MSISDN = "SELECT * FROM CUSTOMER WHERE MSISDN = ?";
+
+    public static final String UPDATE_CUSTOMER_PASSWORD = "UPDATE CUSTOMER SET PASSWORD = ? WHERE EMAIL = ? AND TC_NO = ?";
+
+    public static final String INSERT_NOTIFICATION_LOG = "INSERT INTO NOTIFICATION_LOG (NOTIFICATION_TYPE, NOTIFICATION_TIME, CUSTOMER_ID) VALUES (?, ?, ?)";
+}
