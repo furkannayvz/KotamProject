@@ -15,7 +15,7 @@ public class KafkaApplication {
         String groupId = ConfigReader.get("kafka.group.id");
 
 
-        // --- Consumer Example ---
+    
         System.out.println("\n--- Starting Kafka Consumer (will run in background for a short period) ---");
         KafkaConsumerService consumerService = new KafkaConsumerService(
                 kafkaUrl,
@@ -26,7 +26,7 @@ public class KafkaApplication {
                 KafkaProducerService.NOTIFICATION_EVENTS_TOPIC
         );
 
-        // Run consumer in a separate thread
+       
         Thread consumerThread = new Thread(consumerService);
         consumerThread.start();
 
