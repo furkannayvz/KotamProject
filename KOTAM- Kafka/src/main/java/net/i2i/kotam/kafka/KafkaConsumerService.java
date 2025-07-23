@@ -28,12 +28,9 @@ public class KafkaConsumerService implements Runnable {
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); // Start from beginning if no offset is found
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); 
 
-        // Security settings for Google Cloud Kafka (e.g., Confluent Cloud)
-        // props.put("security.protocol", "SASL_SSL");
-        // props.put("sasl.mechanism", "PLAIN");
-        // props.put("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"YOUR_KAFKA_API_KEY\" password=\"YOUR_KAFKA_API_SECRET\";");
+     
 
 
         this.consumer = new KafkaConsumer<>(props);
@@ -58,29 +55,29 @@ public class KafkaConsumerService implements Runnable {
                     System.out.println("  Key: " + record.key());
                     System.out.println("  Value: " + record.value());
 
-                    // Deserialize based on topic (example processing)
+                    
                     try {
                         switch (record.topic()) {
                             case KafkaProducerService.USER_EVENTS_TOPIC:
                                 CustomerEvent customerEvent = objectMapper.readValue(record.value(), CustomerEvent.class);
                                 System.out.println("  Deserialized CustomerEvent: " + customerEvent);
-                                // SF or OCS would process this
+                                
                                 break;
                             case KafkaProducerService.USAGE_UPDATES_TOPIC:
                                 UsageEvent usageEvent = objectMapper.readValue(record.value(), UsageEvent.class);
                                 System.out.println("  Deserialized UsageEvent: " + usageEvent);
-                                // OCS would process this for real-time charging
+                                
                                 break;
                             case KafkaProducerService.BALANCE_UPDATES_TOPIC:
                                 BalanceUpdate balanceUpdate = objectMapper.readValue(record.value(), BalanceUpdate.class);
                                 System.out.println("  Deserialized BalanceUpdate: " + balanceUpdate);
-                                // ABMF or other systems would process this
+                                
                                 break;
                             case KafkaProducerService.NOTIFICATION_EVENTS_TOPIC:
                                 try {
                                     NotificationMessage message = objectMapper.readValue(record.value(), NotificationMessage.class);
                                     System.out.println("  Deserialized NotificationMessage: " + message);
-                                    // Burada notification mesajını işle (örneğin logla veya farklı bir servise gönder)
+                                    
                                 } catch (Exception e) {
                                     System.err.println("Failed to deserialize NotificationMessage: " + e.getMessage());
                                 }
@@ -95,7 +92,7 @@ public class KafkaConsumerService implements Runnable {
                 }
             }
         } catch (WakeupException e) {
-            // Ignore exception if closing
+            
         } catch (Exception e) {
             System.err.println("Consumer encountered an error: " + e.getMessage());
         } finally {
@@ -105,6 +102,6 @@ public class KafkaConsumerService implements Runnable {
     }
 
     public void shutdown() {
-        consumer.wakeup(); // Interrupts the poll() method
+        consumer.wakeup(); 
     }
 }
