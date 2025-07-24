@@ -10,18 +10,18 @@ import org.slf4j.LoggerFactory;
 
         @Override
         public void handle(NotificationMessage event) {
-            logger.info("NOTIFICATION - User: {} {}, msisdn: {}, Package Name: {}, Local Date Time : {}, Voice Data {} {}, MB Data: {}, SMS Count : {},  Used Amount : {}, Total Amount: {}, Type: {}  ",
+            logger.info("NOTIFICATION - User: {} {}, msisdn: {}, Package Name: {}, Threshold : {}, Amount: {}, Timestamp: {}, Remaining: {}, Email : {},  Start Date : {}, End Date: {}, Type: {}  ",
                     event.getName(),
                     event.getLastname(),
                     event.getMsisdn(),
                     event.getPackageName(),
-                    event.getLocalDateTime(),
-                    event.getVoiceMinutes(),
-                    event.getVoiceSeconds(),
-                    event.getDataMb(),
-                    event.getSmsCount(),
-                    event.getUsedAmount(),
-                    event.getTotalAmount(),
+                    event.getThreshold(),
+                    event.getAmount(),
+                    event.getTimestamp(),
+                    event.getRemaining(),
+                    event.getEmail(),
+                    event.getStartDate(),
+                    event.getEndDate(),
                     event.getType());
         }
     }
