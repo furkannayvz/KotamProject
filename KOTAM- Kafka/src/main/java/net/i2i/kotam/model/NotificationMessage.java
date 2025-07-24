@@ -8,13 +8,13 @@ public class NotificationMessage {
     private String lastname;
     private String msisdn;
     private String packageName;
-    private Date localDateTime;
-    private int voiceMinutes;
-    private int voiceSeconds;
-    private int dataMb;
-    private int smsCount;
-    private int usedAmount;
-    private int totalAmount;
+    private Date timestamp;
+    private String email;
+    private String threshold;
+    private String amount;
+    private String remaining;
+    private String startDate;
+    private String endDate;
     private Type type;
 
     public enum Type {
@@ -33,26 +33,28 @@ public class NotificationMessage {
         public String getPackageName() { return packageName; }
         public void setPackageName(String packageName) { this.packageName = packageName; }
 
-       public Date getLocalDateTime() { return localDateTime; }
-        public void setLocalDateTime(Date localDateTime) { this.localDateTime = localDateTime; }
+    public String getThreshold() { return threshold; }
+    public void setThreshold(String threshold) { this.threshold = threshold; }
 
-       public int getVoiceMinutes() { return voiceMinutes; }
-      public void setVoiceMinutes(int voiceMinutes) { this.voiceMinutes = voiceMinutes; }
+    public String getAmount() { return amount; }
+    public void setAmount(String amount) { this.amount = amount; }
 
-       public int getVoiceSeconds() { return voiceSeconds; }
-       public void setVoiceSeconds(int voiceSeconds) { this.voiceSeconds = voiceSeconds; }
+    public Date getTimestamp() { return timestamp; }
+    public void setTimestamp(Date timestamp) { this.timestamp = timestamp; }
 
-       public int getDataMb() { return dataMb; }
-        public void setDataMb(int dataMb) { this.dataMb = dataMb; }
+    public String getRemaining() { return remaining; }
+    public void setRemaining(String remaining) { this.remaining = remaining; }
 
-        public int getSmsCount() { return smsCount; }
-        public void setSmsCount(int smsCount) { this.smsCount = smsCount; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-        public int getUsedAmount() { return usedAmount; }
-       public void setUsedAmount(int usedAmount) { this.usedAmount = usedAmount; }
+    public String getStartDate() { return startDate; }
+    public void setStartDate(String startDate) { this.startDate = startDate; }
 
-        public int getTotalAmount() { return totalAmount; }
-        public void setTotalAmount(int totalAmount) { this.totalAmount = totalAmount; }
+    public String getEndDate() { return endDate; }
+    public void setEndDate(String endDate) { this.endDate = endDate; }
+
+
 
         public Type getType() { return type; }
         public void setType(Type type) { this.type = type; }
