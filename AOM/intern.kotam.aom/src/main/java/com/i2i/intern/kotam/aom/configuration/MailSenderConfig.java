@@ -1,4 +1,3 @@
-/*
 package com.i2i.intern.kotam.aom.configuration;
 
 import org.springframework.context.annotation.Bean;
@@ -34,5 +33,3 @@ public class MailSenderConfig {
         return mailSender;
     }
 }
-
- */

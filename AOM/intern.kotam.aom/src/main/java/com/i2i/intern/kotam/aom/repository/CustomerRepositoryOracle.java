@@ -264,6 +264,7 @@ public class CustomerRepositoryOracle implements CustomerRepositoryBase {
 // CustomerRepositoryOracle.java
 package com.i2i.intern.kotam.aom.repository;
 
+import java.sql.SQLException;
 import com.i2i.intern.kotam.aom.configuration.DataSourceConfig;
 import com.i2i.intern.kotam.aom.dto.response.LoginResponseDTO;
 import com.i2i.intern.kotam.aom.model.Customer;
@@ -282,9 +283,33 @@ public class CustomerRepositoryOracle implements CustomerRepositoryBase {
     @Autowired
     private DataSource dataSource;
 
+
+
     public CustomerRepositoryOracle() {
         this.dataSource = DataSourceConfig.customDataSource();
+
     }
+
+
+    public boolean updatePasswordByEmail(String email, String nationalId, String newPassword) {
+        String sql = "{call UPDATE_CUSTOMER_PASSWORD(?, ?, ?)}";
+        try (Connection conn = dataSource.getConnection();
+             CallableStatement stmt = conn.prepareCall(sql)) {
+
+            stmt.setString(1, email);          // p_email
+            stmt.setString(2, nationalId);     // p_national_id
+            stmt.setString(3, newPassword);    // p_new_password
+
+            stmt.execute();
+            return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 
     @Override
     public boolean insertCustomer(String msisdn, String name, String surname, String email, String password, String nationalid) {

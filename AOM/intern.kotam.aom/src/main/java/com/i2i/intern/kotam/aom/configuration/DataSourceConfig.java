@@ -1,3 +1,4 @@
+
 package com.i2i.intern.kotam.aom.configuration;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -19,3 +20,6 @@ public class DataSourceConfig {
     }
 
 }
+
+
+

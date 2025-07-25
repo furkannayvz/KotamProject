@@ -36,5 +36,6 @@ public interface CustomerRepositoryBase {
     boolean resetPassword(String email, String nationalId, String newPassword);
     boolean forgotPassword(String email, String nationalId);
     boolean changePassword(String email, String nationalId, String newPassword);
+    //void updatePasswordByEmail(String email, String newPassword);
 }
 

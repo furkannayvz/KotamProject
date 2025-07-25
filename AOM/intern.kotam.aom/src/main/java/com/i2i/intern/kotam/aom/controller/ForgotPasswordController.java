@@ -1,4 +1,3 @@
-/*
 package com.i2i.intern.kotam.aom.controller;
 
 import com.i2i.intern.kotam.aom.dto.request.*;
@@ -40,6 +39,7 @@ public class ForgotPasswordController {
 
         boolean success = passwordResetService.resetPassword(
                 request.getEmail(),
+                request.getNationalId(),
                 request.getCode(),
                 request.getNewPassword()
         );
@@ -48,6 +48,4 @@ public class ForgotPasswordController {
         return ResponseEntity.badRequest().body("Invalid code or email.");
     }
 }
-
- */
 

@@ -1,4 +1,3 @@
-/*
 package com.i2i.intern.kotam.aom.model;
 
 import jakarta.persistence.*;
@@ -50,17 +49,3 @@ public class VerificationCode {
     }
 }
 
-/*
-Kullanıcı “şifremi unuttum” der,
-
-VerificationCode nesnesi oluşturulur,
-
-E-posta ile kullanıcıya doğrulama kodu gönderilir,
-
-Bu nesne veritabanına kayıt edilir,
-
-Kullanıcı kodu girer, sistem bu sınıfa bakarak doğrulama yapar,
-
-Kod geçerliyse işlem devam eder, değilse reddedilir.
-
-*/
