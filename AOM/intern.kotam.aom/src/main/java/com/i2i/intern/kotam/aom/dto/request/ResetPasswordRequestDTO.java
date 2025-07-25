@@ -6,6 +6,7 @@ public class ResetPasswordRequestDTO {
         private String email;
         private String code;
         private String newPassword;
+        private String nationalId;
         private String confirmPassword;
 
 
@@ -34,6 +35,14 @@ public class ResetPasswordRequestDTO {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public String getNationalId() {
+        return nationalId;
+    }
+
+    public void setNationalId(String nationalId) {
+        this.nationalId = nationalId;
     }
 
     public String getConfirmPassword() {

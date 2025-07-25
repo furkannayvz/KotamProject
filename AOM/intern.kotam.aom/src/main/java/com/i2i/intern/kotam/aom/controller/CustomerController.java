@@ -154,20 +154,22 @@ public class CustomerController {
     }
 
 
+    /*
     @PutMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestParam String email,
                                                 @RequestParam String nationalId,
                                                 @RequestParam String newPassword) {
         boolean result = customerService.resetPassword(email, nationalId, newPassword);
         return result ? ResponseEntity.ok("Şifre güncellendi.") : ResponseEntity.badRequest().body("Şifre güncellenemedi.");
-    }
+    }*/
 
+    /*
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email,
                                                  @RequestParam String nationalId) {
         boolean exists = customerService.forgotPassword(email, nationalId);
         return exists ? ResponseEntity.ok("Şifre sıfırlama işlemi mümkün.") : ResponseEntity.badRequest().body("Böyle bir kullanıcı bulunamadı.");
-    }
+    }*/
 
     @GetMapping("/{msisdn}")
     public ResponseEntity<Customer> getCustomerByMsisdn(@PathVariable String msisdn) {

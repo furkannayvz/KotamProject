@@ -1,4 +1,3 @@
-/*
 package com.i2i.intern.kotam.aom.service;
 
 // şifre sıfırlama akışındaki doğrulama kodu (verification code) gönderimini ve kontrolünü yöneten
@@ -19,9 +18,9 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final VerificationCodeRepositoryOracle verificationRepo;
 
-    public EmailService(JavaMailSender mailSender, VerificationCodeRepositoryOracle verificationRepo) {
+    public EmailService(JavaMailSender mailSender) throws SQLException {
         this.mailSender = mailSender;
-        this.verificationRepo = verificationRepo;
+        this.verificationRepo = new VerificationCodeRepositoryOracle(); // Connection içeriden alınıyor
     }
 
     public String sendVerificationCode(String email, String nationalId) {
@@ -36,14 +35,9 @@ public class EmailService {
         mailSender.send(mail);
 
         try {
-            verificationRepo.insertVerificationCode(
-                    email,
-                    code,
-                    nationalId,
-                    LocalDateTime.now().plusMinutes(5)
-            );
+            verificationRepo.insertVerificationCode(email, code, nationalId, LocalDateTime.now().plusMinutes(5));
         } catch (SQLException e) {
-            e.printStackTrace(); // Logging önerilir
+            e.printStackTrace();
         }
 
         return code;
@@ -63,5 +57,5 @@ public class EmailService {
     }
 }
 
-*/
+
 
