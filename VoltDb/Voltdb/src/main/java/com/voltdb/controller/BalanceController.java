@@ -1,8 +1,7 @@
 package com.voltdb.controller;
 
 import com.voltdb.dto.BalanceDTO;
-import com.voltdb.dto.CustomerDTO;
-import com.voltdb.dto.PackageDTO;
+import com.voltdb.dto.CreateBalanceDTO;
 import com.voltdb.service.BalanceService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +37,7 @@ public class BalanceController {
             summary = "Balance ekle",
             description = "Verilen bilgilere sahip balance'ı tabloya ekler"
     )
-    public ResponseEntity<String> insertBalance(@RequestBody BalanceDTO dto) throws Exception {
+    public ResponseEntity<String> insertBalance(@RequestBody CreateBalanceDTO dto) throws Exception {
         balanceService.insertBalance(dto);
         return ResponseEntity.ok("Balance created.");
     }

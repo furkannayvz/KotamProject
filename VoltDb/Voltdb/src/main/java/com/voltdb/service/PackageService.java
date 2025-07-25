@@ -68,6 +68,10 @@ public class PackageService {
         ClientResponse response = voltClient.callProcedure(procedure,
                 input);
         VoltTable vt = response.getResults()[0];
+
+        if (!vt.advanceRow()) {
+            return null; // müşteri bulunamadı
+        }
         return vt.getString(0);
     }
 
@@ -76,6 +80,10 @@ public class PackageService {
         ClientResponse response = voltClient.callProcedure(procedure,
                 input);
         VoltTable vt = response.getResults()[0];
+
+        if (!vt.advanceRow()) {
+            return null; // müşteri bulunamadı
+        }
         return vt.getString(0);
     }
 }

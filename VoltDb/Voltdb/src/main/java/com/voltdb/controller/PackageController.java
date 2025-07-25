@@ -1,6 +1,5 @@
 package com.voltdb.controller;
 
-import com.voltdb.dto.CustomerDTO;
 import com.voltdb.dto.PackageDTO;
 import com.voltdb.service.PackageService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +16,7 @@ public class PackageController {
         this.packageService = packageService;
     }
 
-    @GetMapping("/name/{packageId}")
+    @GetMapping("/name/by-id/{packageId}")
     @Operation(
             summary = "Package ismi bul",
             description = "Belirtilen Package ID'nin adını getirir.."
@@ -27,7 +26,7 @@ public class PackageController {
         return ResponseEntity.ok(name);
     }
 
-    @GetMapping("/name/{msisdn}")
+    @GetMapping("/name/by-msisdn/{msisdn}")
     @Operation(
             summary = "Package ismi bul",
             description = "Belirtilen MSISDN'ye sahip kullanıcının Package adını getirir."
@@ -37,7 +36,7 @@ public class PackageController {
         return ResponseEntity.ok(name);
     }
 
-    @GetMapping("/{packageId}")
+    @GetMapping("/by-id/{packageId}")
     @Operation(
             summary = "Package bilgisi bul",
             description = "Belirtilen Package ID nin tüm bilgisini getirir."
@@ -52,7 +51,7 @@ public class PackageController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/{msisdn}")
+    @GetMapping("/by-msisdn/{msisdn}")
     @Operation(
             summary = "Package bilgisi bul",
             description = "Belirtilen MSISDN nin Package bilgisini getirir."
