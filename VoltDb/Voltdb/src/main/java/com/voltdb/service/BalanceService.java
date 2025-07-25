@@ -1,8 +1,7 @@
 package com.voltdb.service;
 
 import com.voltdb.dto.BalanceDTO;
-import com.voltdb.dto.CustomerDTO;
-import com.voltdb.dto.PackageDTO;
+import com.voltdb.dto.CreateBalanceDTO;
 import org.springframework.stereotype.Service;
 import org.voltdb.VoltTable;
 import org.voltdb.client.Client;
@@ -52,22 +51,26 @@ public class BalanceService {
                 data,msisdn);
     }
 
-    public void insertBalance(BalanceDTO dto)throws Exception {
+    public void insertBalance(CreateBalanceDTO dto)throws Exception {
 
-        voltClient.callProcedure("INSERT_BALANCE",
-                dto.BALANCE_ID,
+        int maxBalanceId = getMaxBalanceId();
+        maxBalanceId += 1;
+        voltClient.callProcedure("INSERT_BALANCE2",
+                maxBalanceId,
                 dto.MSISDN,
                 dto.PACKAGE_ID,
                 dto.BAL_LEFT_MINUTES,
                 dto.BAL_LEFT_SMS,
-                dto.BAL_LEFT_DATA,
-                dto.SDATE
+                dto.BAL_LEFT_DATA
         );
     }
 
     public int getMaxBalanceId() throws Exception{
         ClientResponse response = voltClient.callProcedure("GET_MAX_BALANCE_ID");
         VoltTable vt = response.getResults()[0];
+        if (!vt.advanceRow()) {
+            throw new RuntimeException("Max Balance Fonksiyonu hatası");
+        }
         return (int) vt.getLong(0);
     }
 
@@ -76,6 +79,10 @@ public class BalanceService {
         ClientResponse response = voltClient.callProcedure(procedure,
                 input);
         VoltTable vt = response.getResults()[0];
+
+        if (!vt.advanceRow()) {
+            return null; // müşteri bulunamadı
+        }
         return vt.getString(0);
     }
 
@@ -84,6 +91,10 @@ public class BalanceService {
         ClientResponse response = voltClient.callProcedure(procedure,
                 input);
         VoltTable vt = response.getResults()[0];
+
+        if (!vt.advanceRow()) {
+            return null; // müşteri bulunamadı
+        }
         return vt.getString(0);
     }
 

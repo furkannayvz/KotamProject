@@ -12,6 +12,7 @@ public class VoltDbConfig {
     @Bean(destroyMethod = "close")
     public Client voltClient() throws Exception {
         ClientConfig clientConfig = new ClientConfig();
+        clientConfig.setReconnectOnConnectionLoss(true);
         Client client = ClientFactory.createClient(clientConfig);
         //client.createConnection("localhost", 21212);
         client.createConnection("localhost" + ":" + 21212);

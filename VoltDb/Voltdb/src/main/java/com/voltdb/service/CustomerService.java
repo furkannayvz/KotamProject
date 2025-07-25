@@ -30,6 +30,10 @@ public class CustomerService {
     public String getMaxCustomerMsisdn() throws Exception{
         ClientResponse response = voltClient.callProcedure("GET_MAX_CUSTOMER_MSISDN");
         VoltTable vt = response.getResults()[0];
+        if (!vt.advanceRow()) {
+            return null; // müşteri bulunamadı
+        }
+
         return vt.getString(0);
     }
 
@@ -67,6 +71,9 @@ public class CustomerService {
                 email,
                 national_id);
         VoltTable vt = response.getResults()[0];
+        if (!vt.advanceRow()) {
+            throw new RuntimeException("Customer Exists hatası");
+        }
         return Integer.parseInt(vt.getString(0));
     }
 
@@ -83,6 +90,11 @@ public class CustomerService {
         ClientResponse response = voltClient.callProcedure(procedure,
                 input);
         VoltTable vt = response.getResults()[0];
+
+        if (!vt.advanceRow()) {
+            return null;
+        }
+
         return vt.getString(0);
     }
 
