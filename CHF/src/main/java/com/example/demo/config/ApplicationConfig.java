@@ -1,0 +1,13 @@
+package com.example.demo.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+@Configuration
+@EnableScheduling
+@EnableAsync
+public class ApplicationConfig {
+    // This enables the @Scheduled annotation for TGF integration
+    // and @Async for asynchronous processing
+}
