@@ -204,7 +204,6 @@ ipcMain.handle('getUserPackageByMsisdn', async (event, msisdn) => {
             console.log('main.js: Package entity:', customerData.packageEntity);
             console.log('main.js: Start date:', customerData.sDate || customerData.sdate || customerData.getsDate);
             
-            // Check if packageEntity exists
             if (!customerData.packageEntity) {
                 console.warn('main.js: No package entity found via API. Will rely on stored login data.');
                 return { 
