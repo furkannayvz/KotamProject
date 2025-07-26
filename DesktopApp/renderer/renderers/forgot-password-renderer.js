@@ -45,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = emailInput.value.trim();
             const nationalId = nationalIdInput.value.trim();
 
-            // Validation
             if (!email || !nationalId) {
                 displayMessage(forgotPasswordMessage, 'Please enter your email and national ID', false);
                 return;
@@ -60,10 +59,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             sendButton.disabled = true;
-            sendButton.textContent = 'Sending...';
+            sendButton.textContent = 'Checking user...';
 
             try {
-                console.log('forgot-password-renderer.js: Calling forgot password API');
+                console.log('forgot-password-renderer.js: Checking if customer exists');
+                const customerCheck = await window.electronAPI.checkCustomerExists({ email, nationalId });
+                console.log('forgot-password-renderer.js: Customer existence check response:', customerCheck);
+                
+                if (!customerCheck.success) {
+                    displayMessage(forgotPasswordMessage, customerCheck.message || 'Error checking user information', false);
+                    return;
+                }
+
+                if (!customerCheck.exists) {
+                    displayMessage(forgotPasswordMessage, 'No account found with this email and national ID', false);
+                    return;
+                }
+
+                sendButton.textContent = 'Sending email...';
+                console.log('forgot-password-renderer.js: Customer exists, calling forgot password API');
                 const result = await window.electronAPI.forgotPassword({ email, nationalId });
                 console.log('forgot-password-renderer.js: Password reset API response:', result);
                 
@@ -80,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     displayMessage(forgotPasswordMessage, result.message || 'Failed to send verification code', false);
                 }
             } catch (error) {
-                console.error('forgot-password-renderer.js: Error during password reset:', error);
+                console.error('forgot-password-renderer.js: Error during password reset process:', error);
                 displayMessage(forgotPasswordMessage, 'Error during password reset. Please try again.', false);
             } finally {
                 sendButton.disabled = false;
