@@ -21,9 +21,9 @@ public class KafkaService {
     public void sendUsageData(Object usageData) {
         try {
             kafkaTemplate.send(usageDataTopic, usageData);
-            logger.info("✅ Kafka'ya veri gönderildi: {}", usageData);
+            logger.info("Kafka'ya veri gönderildi: {}", usageData);
         } catch (Exception e) {
-            logger.error("❌ Kafka'ya veri gönderilirken hata: {}", e.getMessage());
+            logger.error("Kafka'ya veri gönderilirken hata: {}", e.getMessage());
             throw new RuntimeException("Kafka'ya veri gönderilemedi", e);
         }
     }

@@ -78,6 +78,19 @@
 			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Spring Boot Test Dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- HTTP Client for VoltDB REST API -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -97,9 +110,16 @@
 				</configuration>
 				<executions>
 					<execution>
-						<goals>
-							<goal>java</goal>
-						</goals>
+						<id>hazelcast-test</id>
+						<configuration>
+							<mainClass>com.example.demo.config.HazelcastTest</mainClass>
+						</configuration>
+					</execution>
+					<execution>
+						<id>voltdb-rest-test</id>
+						<configuration>
+							<mainClass>com.example.demo.config.VoltDBRestTest</mainClass>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
