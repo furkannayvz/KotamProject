@@ -15,7 +15,6 @@ public class VoiceChargingRequest {
         this.duration = duration;
     }
 
-    // Getters and Setters
     public String getCallerMsisdn() { return callerMsisdn; }
     public void setCallerMsisdn(String callerMsisdn) { this.callerMsisdn = callerMsisdn; }
     

@@ -22,7 +22,6 @@ public class ChargingService {
         return validateAndChargeSms(request.getSenderMsisdn(), request.getSmsCount())
                 .map(response -> {
                     if (response.isSuccess()) {
-                        // Log the transaction
                         logSmsTransaction(request);
                     }
                     return response;
@@ -34,13 +33,11 @@ public class ChargingService {
      * Process Voice charging request
      */
     public Mono<ChargingResponse> processVoiceCharging(VoiceChargingRequest request) {
-        // Convert duration from seconds to minutes (rounded up)
         int minutes = (int) Math.ceil(request.getDuration() / 60.0);
         
         return validateAndChargeVoice(request.getCallerMsisdn(), minutes)
                 .map(response -> {
                     if (response.isSuccess()) {
-                        // Log the transaction
                         logVoiceTransaction(request, minutes);
                     }
                     return response;
@@ -55,7 +52,6 @@ public class ChargingService {
         return validateAndChargeData(request.getMsisdn(), request.getDataUsage())
                 .map(response -> {
                     if (response.isSuccess()) {
-                        // Log the transaction
                         logDataTransaction(request);
                     }
                     return response;
@@ -74,7 +70,6 @@ public class ChargingService {
                         int currentSmsBalance = balanceNode.get("BAL_LEFT_SMS").asInt();
                         
                         if (currentSmsBalance >= smsCount) {
-                            // Sufficient balance, proceed with charging
                             int newBalance = currentSmsBalance - smsCount;
                             return voltDBRestService.updateSmsBalance(msisdn, newBalance)
                                     .map(updateResult -> {
@@ -84,7 +79,6 @@ public class ChargingService {
                                         return response;
                                     });
                         } else {
-                            // Insufficient balance
                             return Mono.just(new ChargingResponse(false, 
                                 "Insufficient SMS balance. Required: " + smsCount + ", Available: " + currentSmsBalance, 
                                 msisdn, "SMS"));
@@ -106,7 +100,6 @@ public class ChargingService {
                         int currentMinutesBalance = balanceNode.get("BAL_LEFT_MINUTES").asInt();
                         
                         if (currentMinutesBalance >= minutes) {
-                            // Sufficient balance, proceed with charging
                             int newBalance = currentMinutesBalance - minutes;
                             return voltDBRestService.updateMinutesBalance(msisdn, newBalance)
                                     .map(updateResult -> {
@@ -116,9 +109,8 @@ public class ChargingService {
                                         return response;
                                     });
                         } else {
-                            // Insufficient balance
                             return Mono.just(new ChargingResponse(false, 
-                                "Insufficient voice balance. Required: " + minutes + " minutes, Available: " + currentMinutesBalance, 
+                                "insufficient voice balance. Required: " + minutes + " minutes, Available: " + currentMinutesBalance, 
                                 msisdn, "VOICE"));
                         }
                     } catch (Exception e) {
@@ -138,7 +130,6 @@ public class ChargingService {
                         int currentDataBalance = balanceNode.get("BAL_LEFT_DATA").asInt();
                         
                         if (currentDataBalance >= dataUsageMB) {
-                            // Sufficient balance, proceed with charging
                             int newBalance = currentDataBalance - dataUsageMB;
                             return voltDBRestService.updateDataBalance(msisdn, newBalance)
                                     .map(updateResult -> {
@@ -148,7 +139,6 @@ public class ChargingService {
                                         return response;
                                     });
                         } else {
-                            // Insufficient balance
                             return Mono.just(new ChargingResponse(false, 
                                 "Insufficient data balance. Required: " + dataUsageMB + "MB, Available: " + currentDataBalance + "MB", 
                                 msisdn, "DATA"));
@@ -163,7 +153,6 @@ public class ChargingService {
         return new ChargingResponse(false, message, msisdn, type);
     }
 
-    // Logging methods (you can enhance these to use proper logging or store in database)
     private void logSmsTransaction(SmsChargingRequest request) {
         System.out.println("SMS Transaction Logged: " + request.getSenderMsisdn() + 
                           " -> " + request.getReceiverMsisdn() + 

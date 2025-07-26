@@ -42,7 +42,6 @@ public class ChargingController {
      */
     @PostMapping("/voice")
     public Mono<ResponseEntity<ChargingResponse>> chargeVoice(@RequestBody VoiceChargingRequest request) {
-        // Validate request
         if (request.getCallerMsisdn() == null || request.getCallerMsisdn().trim().isEmpty()) {
             ChargingResponse errorResponse = new ChargingResponse(false, "Caller MSISDN is required", null, "VOICE");
             return Mono.just(ResponseEntity.badRequest().body(errorResponse));
@@ -69,7 +68,6 @@ public class ChargingController {
      */
     @PostMapping("/data")
     public Mono<ResponseEntity<ChargingResponse>> chargeData(@RequestBody DataChargingRequest request) {
-        // Validate request
         if (request.getMsisdn() == null || request.getMsisdn().trim().isEmpty()) {
             ChargingResponse errorResponse = new ChargingResponse(false, "MSISDN is required", null, "DATA");
             return Mono.just(ResponseEntity.badRequest().body(errorResponse));
