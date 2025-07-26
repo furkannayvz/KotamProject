@@ -1,0 +1,34 @@
+{
+  "name": "kotam-electron-app",
+  "version": "1.0.0",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder build --publish never"
+  },
+  "keywords": [],
+  "author": "Bugra Kaya",
+  "devDependencies": {
+    "d3": "^7.8.5",
+    "electron": "^29.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.i2i.kotamapp",
+    "productName": "Kotam",
+    "copyright": "Copyright © 2025 ${author}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "renderer/**/*",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "renderer/assets/icon.ico"
+    }
+  }
+}

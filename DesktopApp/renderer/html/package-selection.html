@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KOTAM - My Tariff</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-img {
+            width: 120px;
+            height: auto;
+            margin-right: 15px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 300;
+            color: #2c3e50;
+            letter-spacing: 2px;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-bottom: 50px;
+            line-height: 1.5;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+            min-height: 200px;
+        }
+
+        .package-card {
+            background: linear-gradient(135deg, #192348 0%, #2d3e6e 100%);
+            border-radius: 16px;
+            padding: 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .package-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .package-card:hover::before {
+            opacity: 1;
+        }
+
+        .package-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .package-card.selected {
+            background: linear-gradient(135deg, #375cc6 0%, #475cc6 100%);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+        }
+
+        .package-header {
+            margin-bottom: 25px;
+        }
+
+        .package-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .package-price {
+            font-size: 18px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .package-price .amount {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .package-features {
+            list-style: none;
+        }
+
+        .package-features li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .package-features li:last-child {
+            margin-bottom: 0;
+        }
+
+        .check-icon {
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .check-icon::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-end;
+            margin-top: 50px;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            min-width: 150px;
+        }
+
+        .btn-back {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-signup {
+            background: #2e3b62;
+            color: white;
+        }
+
+        .btn-signup:hover:not(:disabled) {
+            background: #1a202c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-signup:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .message-box {
+            margin-top: 20px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .message-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message-success {
+            background-color: #e6ffe6;
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+
+        .message-error {
+            background-color: #ffe6e6;
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+        .loading-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e0e0e0;
+            border-top: 2px solid #666;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .packages-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .package-card {
+                padding: 25px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .package-card {
+                padding: 20px;
+            }
+
+            .package-name {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="../assets/kotam_siyah_logo.png" alt="Kotam Logo" class="logo-img" />
+            </div>
+            <h1 class="page-title">My Tariff</h1>
+            <p class="page-subtitle">Choose the perfect plan for your needs</p>
+        </div>
+
+        <!-- Packages will be dynamically loaded here -->
+        <div class="packages-grid">
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                Loading packages...
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button type="button" class="btn btn-back" id="back-button">Back</button>
+            <button type="button" class="btn btn-signup" id="signup-button" disabled>Sign Up</button>
+        </div>
+
+        <div id="message" class="message-box hidden"></div>
+    </div>
+
+    <script src="../renderers/package-selection-renderer.js"></script>
+</body>
+
+</html>
