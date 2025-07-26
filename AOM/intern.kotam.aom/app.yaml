@@ -1,3 +1,0 @@
-runtime: java21
-instance_class: F1
-entrypoint: java -jar target/kotam.aom-0.0.1-SNAPSHOT.jar
