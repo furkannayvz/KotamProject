@@ -28,7 +28,6 @@ public class CHFClientService {
                     "senderMsisdn": "%s",
                     "receiverMsisdn": "%s",
                     "location": %d,
-                    "timestamp": "%s"
                 }
                 """, 
                 smsTransaction.getSenderMsisdn(),
@@ -47,9 +46,9 @@ public class CHFClientService {
             httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString())
                     .thenAccept(response -> {
                         if (response.statusCode() == 200) {
-                            System.out.println("✓ SMS charged: " + smsTransaction.getSenderMsisdn());
+                            System.out.println("SMS charged: " + smsTransaction.getSenderMsisdn());
                         } else {
-                            System.err.println("✗ SMS charge failed: " + response.statusCode());
+                            System.err.println("SMS charge failed: " + response.statusCode());
                         }
                     });
                     
@@ -66,7 +65,6 @@ public class CHFClientService {
                     "calleeMsisdn": "%s",
                     "location": %d,
                     "duration": %d,
-                    "timestamp": "%s"
                 }
                 """, 
                 voiceTransaction.getCallerMsisdn(),
@@ -86,9 +84,9 @@ public class CHFClientService {
             httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString())
                     .thenAccept(response -> {
                         if (response.statusCode() == 200) {
-                            System.out.println("✓ Voice charged: " + voiceTransaction.getCallerMsisdn());
+                            System.out.println("Voice charged: " + voiceTransaction.getCallerMsisdn());
                         } else {
-                            System.err.println("✗ Voice charge failed: " + response.statusCode());
+                            System.err.println("Voice charge failed: " + response.statusCode());
                         }
                     });
                     
@@ -105,7 +103,6 @@ public class CHFClientService {
                     "location": %d,
                     "dataUsage": %d,
                     "ratingGroup": %d,
-                    "timestamp": "%s"
                 }
                 """, 
                 dataTransaction.getMsisdn(),
@@ -125,9 +122,9 @@ public class CHFClientService {
             httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString())
                     .thenAccept(response -> {
                         if (response.statusCode() == 200) {
-                            System.out.println("✓ Data charged: " + dataTransaction.getMsisdn());
+                            System.out.println("Data charged: " + dataTransaction.getMsisdn());
                         } else {
-                            System.err.println("✗ Data charge failed: " + response.statusCode());
+                            System.err.println("Data charge failed: " + response.statusCode());
                         }
                     });
                     
