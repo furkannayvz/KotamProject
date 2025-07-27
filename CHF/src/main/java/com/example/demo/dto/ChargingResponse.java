@@ -6,6 +6,7 @@ public class ChargingResponse {
     private String transactionId;
     private String msisdn;
     private int remainingBalance;
+    private int initialBalance;
     private String transactionType;
 
     public ChargingResponse() {}
@@ -36,6 +37,9 @@ public class ChargingResponse {
     
     public int getRemainingBalance() { return remainingBalance; }
     public void setRemainingBalance(int remainingBalance) { this.remainingBalance = remainingBalance; }
+
+    public int getInitialBalance(){return initialBalance;}
+    public void setInitialBalance(int initialBalance){this.initialBalance = initialBalance;}
     
     public String getTransactionType() { return transactionType; }
     public void setTransactionType(String transactionType) { this.transactionType = transactionType; }

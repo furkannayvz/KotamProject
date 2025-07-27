@@ -1,30 +1,40 @@
 package com.example.demo.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import com.example.demo.dto.NotificationMessage;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class KafkaService {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaService.class);
+    private final KafkaTemplate<String, NotificationMessage> kafkaTemplate;
 
-    @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
+    private static final String NOTIFICATION_TOPIC = "notificationEvents";
 
-    @Value("${chf.kafka.topic.usage-data:usage-data}")
-    private String usageDataTopic;
+    public KafkaService(KafkaTemplate<String, NotificationMessage> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
-    public void sendUsageData(Object usageData) {
+    //sends a notification message to the Kafka NOTIFICATION_EVENTS_TOPIC.
+    //The key for the Kafka message will be the MSISDN.
+    public void sendNotificationEvent(NotificationMessage notificationMessage) {
         try {
-            kafkaTemplate.send(usageDataTopic, usageData);
-            logger.info("Kafka'ya veri gönderildi: {}", usageData);
+            kafkaTemplate.send(NOTIFICATION_TOPIC, notificationMessage.getMsisdn(), notificationMessage)
+                         .whenComplete((result, ex) -> {
+                             if (ex == null) {
+                                 logger.info("Sent notification event to topic '{}' for MSISDN '{}', offset {}",
+                                         NOTIFICATION_TOPIC, notificationMessage.getMsisdn(), result.getRecordMetadata().offset());
+                             } else {
+                                 logger.error("Failed to send notification event for MSISDN '{}' to topic '{}': {}",
+                                         notificationMessage.getMsisdn(), NOTIFICATION_TOPIC, ex.getMessage());
+                             }
+                         });
         } catch (Exception e) {
-            logger.error("Kafka'ya veri gönderilirken hata: {}", e.getMessage());
-            throw new RuntimeException("Kafka'ya veri gönderilemedi", e);
+            logger.error("Error while attempting to send notification event for MSISDN '{}': {}",
+                    notificationMessage.getMsisdn(), e.getMessage(), e);
         }
     }
 }

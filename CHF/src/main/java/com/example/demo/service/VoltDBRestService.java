@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.example.demo.dto.*;
 
 import java.time.Duration;
 
@@ -53,28 +55,25 @@ public class VoltDBRestService {
                 .timeout(Duration.ofSeconds(10));
     }
 
-    public Mono<String> getCustomerEmail(String msisdn) {
-        return voltdbWebClient
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                    .path("/customers/email")
-                    .queryParam("msisdn", msisdn)
-                    .build())
-                .retrieve()
-                .bodyToMono(String.class)
-                .timeout(Duration.ofSeconds(10));
-    }
-
-    public Mono<String> getCustomerPassword(String msisdn) {
-        return voltdbWebClient
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                    .path("/customers/password")
-                    .queryParam("msisdn", msisdn)
-                    .build())
-                .retrieve()
-                .bodyToMono(String.class)
-                .timeout(Duration.ofSeconds(10));
+    public Mono<NotificationMessage> getCustomerDetailsForNotification(String msisdn) {
+        return getCustomerByMsisdn(msisdn)
+                .flatMap(customerJson -> {
+                    try {
+                        JsonNode customerNode = objectMapper.readTree(customerJson);
+                        NotificationMessage notificationMessage = new NotificationMessage();
+                        notificationMessage.setMsisdn(msisdn);
+                        notificationMessage.setName(customerNode.has("NAME") ? customerNode.get("NAME").asText() : null);
+                        notificationMessage.setLastname(customerNode.has("SURNAME") ? customerNode.get("SURNAME").asText() : null);
+                        notificationMessage.setEmail(customerNode.has("EMAIL") ? customerNode.get("EMAIL").asText() : null);
+                        return Mono.just(notificationMessage);
+                    } catch (Exception e) {
+                        System.err.println("Error parsing customer details for MSISDN " + msisdn + ": " + e.getMessage());
+                        NotificationMessage errorNotification = new NotificationMessage();
+                        errorNotification.setMsisdn(msisdn);
+                        return Mono.just(errorNotification);
+                    }
+                })
+                .onErrorReturn(new NotificationMessage());
     }
 
     public Mono<String> getBalanceByMsisdn(String msisdn) {
@@ -86,23 +85,28 @@ public class VoltDBRestService {
                 .timeout(Duration.ofSeconds(10));
     }
 
-    public Mono<String> getPackageByMsisdn(String msisdn) {
+    public Mono<PackageDetailsDto> getPackageDetailsById(int packageId) {
         return voltdbWebClient
                 .get()
-                .uri("/packages/by-msisdn/{msisdn}", msisdn)
+                .uri("/packages/by-id/{packageId}", packageId)
                 .retrieve()
                 .bodyToMono(String.class)
-                .timeout(Duration.ofSeconds(10));
+                .flatMap(packageJson -> {
+                    try {
+                        JsonNode packageNode = objectMapper.readTree(packageJson);
+                        int amountMinutes = packageNode.has("AMOUNT_MINUTES") ? packageNode.get("AMOUNT_MINUTES").asInt() : 0;
+                        int amountData = packageNode.has("AMOUNT_DATA") ? packageNode.get("AMOUNT_DATA").asInt() : 0;
+                        int amountSms = packageNode.has("AMOUNT_SMS") ? packageNode.get("AMOUNT_SMS").asInt() : 0;
+                        String packageName = packageNode.has("PACKAGE_NAME") ? packageNode.get("PACKAGE_NAME").asText() : null;
+                        return Mono.just(new PackageDetailsDto(amountMinutes, amountData, amountSms, packageName));
+                    } catch (Exception e) {
+                        System.err.println("Error parsing package details for Package ID " + packageId + ": " + e.getMessage());
+                        return Mono.just(new PackageDetailsDto(0, 0, 0, null));
+                    }
+                })
+                .onErrorReturn(new PackageDetailsDto(0, 0, 0, null));
     }
 
-    public Mono<String> getPackageNameByMsisdn(String msisdn) {
-        return voltdbWebClient
-                .get()
-                .uri("/packages/name/by-msisdn/{msisdn}", msisdn)
-                .retrieve()
-                .bodyToMono(String.class)
-                .timeout(Duration.ofSeconds(10));
-    }
 
     public Mono<String> updateSmsBalance(String msisdn, int sms) {
         return voltdbWebClient
@@ -138,6 +142,50 @@ public class VoltDBRestService {
                     .queryParam("msisdn", msisdn)
                     .queryParam("data", data)
                     .build())
+                .retrieve()
+                .bodyToMono(String.class)
+                .timeout(Duration.ofSeconds(10));
+    }
+
+    // Other existing methods (unchanged for brevity)
+    public Mono<String> getCustomerEmail(String msisdn) {
+        return voltdbWebClient
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                    .path("/customers/email")
+                    .queryParam("msisdn", msisdn)
+                    .build())
+                .retrieve()
+                .bodyToMono(String.class)
+                .timeout(Duration.ofSeconds(10));
+    }
+
+    public Mono<String> getCustomerPassword(String msisdn) {
+        return voltdbWebClient
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                    .path("/customers/password")
+                    .queryParam("msisdn", msisdn)
+                    .build())
+                .retrieve()
+                .bodyToMono(String.class)
+                .timeout(Duration.ofSeconds(10));
+    }
+
+    public Mono<String> getPackageByMsisdn(String msisdn) {
+        // This is the raw endpoint, getPackageDetailsByMsisdn above is preferred
+        return voltdbWebClient
+                .get()
+                .uri("/packages/by-msisdn/{msisdn}", msisdn)
+                .retrieve()
+                .bodyToMono(String.class)
+                .timeout(Duration.ofSeconds(10));
+    }
+
+    public Mono<String> getPackageNameByMsisdn(String msisdn) {
+        return voltdbWebClient
+                .get()
+                .uri("/packages/name/by-msisdn/{msisdn}", msisdn)
                 .retrieve()
                 .bodyToMono(String.class)
                 .timeout(Duration.ofSeconds(10));
