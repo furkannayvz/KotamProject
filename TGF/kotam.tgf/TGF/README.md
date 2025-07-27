@@ -1,7 +1,8 @@
 # TGF Traffic Generator Function
 
 # commands for build:
-    mvn install:install-file -Dfile=libs/hazelcast-1.0-SNAPSHOT.jar -DgroupId=com.i2i.cellenta -DartifactId=hazelcast -Dversion=1.0-SNAPSHOT -Dpackaging=jar
+    mvn install:install-file -Dfile=libs/hazelcast_operations-1.0-SNAPSHOT.jar -DgroupId=com.i2i.kotam -DartifactId=hazelcast -Dversion=1.0-SNAPSHOT -Dpackaging=jar
+    mvn spring-boot:run
 
     
 
