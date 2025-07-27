@@ -19,8 +19,8 @@ public class MailSenderConfig {
         mailSender.setPort(587);
 
         // Gmail hesabı bilgileri
-        mailSender.setUsername("zelihapolat111@gmail.com"); // Buraya kendi mailini yaz
-        mailSender.setPassword("ntgeikgnlqgjpjfm");        // Gmail uygulama şifresi
+        mailSender.setUsername("verify.kotam@gmail.com"); // Buraya kendi mailini yaz
+        mailSender.setPassword("mbmukwcrdbvptzrh");        // Gmail uygulama şifresi
 
         // Ek SMTP özellikleri
         Properties props = mailSender.getJavaMailProperties();

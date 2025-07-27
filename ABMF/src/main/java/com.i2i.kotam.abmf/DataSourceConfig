@@ -1,0 +1,36 @@
+package com.i2i.kotam.abmf;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+import net.i2i.kotam.config.ConfigReader;
+
+import javax.sql.DataSource;
+
+public class DataSourceConfig {
+
+    // HikariCP bağlantı havuzu (connection pool) nesnesi statik ve tekil (singleton)
+    private static final HikariDataSource dataSource;
+
+    static {
+        // HikariCP yapılandırma objesi oluşturulur
+        HikariConfig config = new HikariConfig();
+
+        // Oracle veritabanı bağlantı URL'si config dosyasından okunur
+        config.setJdbcUrl(ConfigReader.get("oracle.url"));
+
+        // Oracle kullanıcı adı config dosyasından okunur
+        config.setUsername(ConfigReader.get("oracle.username"));
+
+        // Oracle parola config dosyasından okunur
+        config.setPassword(ConfigReader.get("oracle.password"));
+
+        // Yapılandırma ile HikariDataSource (bağlantı havuzu) oluşturulur
+        dataSource = new HikariDataSource(config);
+    }
+
+    // Başka sınıfların kullanabilmesi için DataSource'u döndüren statik metot
+    public static DataSource getDataSource() {
+        return dataSource;
+    }
+}

@@ -2,6 +2,7 @@ package com.i2i.intern.kotam.aom.controller;
 
 import com.i2i.intern.kotam.aom.model.PackageEntity;
 import com.i2i.intern.kotam.aom.service.PackageServiceOracle;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,11 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Controller class for Package-related operations (Oracle)
- */
 @RestController
 @RequestMapping("/api/packages")
+@Tag(name = "Paket İşlemleri", description = "Paket listeleme ve detay sorgulama işlemleri")
 public class PackageController {
 
     private final PackageServiceOracle packageService;

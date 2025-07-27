@@ -20,6 +20,8 @@ public class PasswordResetService {
     }
 
     public boolean resetPassword(String email, String nationalId, String code, String newPassword) {
+        System.out.println("Sifre güncelleme cagrildi");
+
         boolean isValid = emailService.verifyCode(email, code);
         if (!isValid) return false;
 

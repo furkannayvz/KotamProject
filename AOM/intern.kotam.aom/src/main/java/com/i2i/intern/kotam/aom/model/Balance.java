@@ -195,4 +195,28 @@ public class Balance {
     public Timestamp getLastUpdate() {
         return this.sDate;
     }
+
+    public Long getRemainingMinutes() {
+        return this.leftMinutes;
+    }
+
+    public Long getRemainingSms() {
+        return this.leftSms;
+    }
+
+    public Long getRemainingData() {
+        return this.leftData;
+    }
+
+    public void setRemainingMinutes(Long m) {
+        this.leftMinutes = m;
+    }
+
+    public void setRemainingSms(Long s) {
+        this.leftSms = s;
+    }
+
+    public void setRemainingData(Long d) {
+        this.leftData = d;
+    }
 }

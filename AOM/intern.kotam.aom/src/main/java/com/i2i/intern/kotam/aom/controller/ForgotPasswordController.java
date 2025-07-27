@@ -3,11 +3,13 @@ package com.i2i.intern.kotam.aom.controller;
 import com.i2i.intern.kotam.aom.dto.request.*;
 import com.i2i.intern.kotam.aom.service.EmailService;
 import com.i2i.intern.kotam.aom.service.PasswordResetService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Şifre Kurtarma", description = "Şifre sıfırlama, kod gönderme ve doğrulama işlemleri")
 public class ForgotPasswordController {
 
     private final EmailService emailService;

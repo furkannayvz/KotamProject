@@ -1,0 +1,41 @@
+package com.i2i.kotam.abmf;
+
+import net.i2i.kotam.model.BalanceUpdate;
+
+import javax.sql.DataSource;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public class OracleOperations {
+
+    // DataSourceConfig sınıfından Oracle DB bağlantısı için DataSource alınır (connection pool)
+    private static final DataSource dataSource = DataSourceConfig.getDataSource();
+
+    // Oracle'daki stored procedure'ü çağırıp balance bilgilerini güncelleyen statik metod
+    public static void updateUserBalance(BalanceUpdate balanceUpdate) {
+        // Çağrılacak Oracle prosedürünün çağrı şekli (4 parametreli)
+        String procedureCall = "{call update_balance_by_msisdn(?, ?, ?, ?)}";
+
+        // try-with-resources ile Connection ve CallableStatement otomatik kapatılır
+        try (Connection connection = dataSource.getConnection();
+             CallableStatement callableStatement = connection.prepareCall(procedureCall)) {
+
+            // Prosedüre parametreler sırayla set edilir
+            callableStatement.setString(1, balanceUpdate.getMSISDN());          // 1. parametre MSISDN (telefon numarası)
+            callableStatement.setInt(2, balanceUpdate.getBAL_LEFT_MINUTES());   // 2. parametre kalan dakika
+            callableStatement.setInt(3, balanceUpdate.getBAL_LEFT_SMS());       // 3. parametre kalan SMS
+            callableStatement.setInt(4, balanceUpdate.getBAL_LEFT_DATA());      // 4. parametre kalan data
+
+            // Prosedür çağrılır
+            callableStatement.execute();
+
+            System.out.println("Prosedür başarıyla çağrıldı!");
+
+        } catch (SQLException e) {
+            // Prosedür çağrılırken oluşan hata yakalanır ve detaylı yazdırılır
+            System.err.println("Oracle prosedürü çalıştırılırken hata oluştu:");
+            e.printStackTrace();
+        }
+    }
+}

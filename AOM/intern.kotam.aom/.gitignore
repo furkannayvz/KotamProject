@@ -4,19 +4,13 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-# Maven
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### sts ###
+### STS ###
 .apt_generated
 .classpath
 .factorypath
 .project
 .settings
-.springbeans
+.springBeans
 .sts4-cache
 
 ### IntelliJ IDEA ###
@@ -37,52 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-*.log
-logs/
-spring.log
-
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-.env
-.env.local
-.env.production
-*.env
-application-local.properties
-application-dev.properties
-application-prod.properties
-
-*.key
-*.pem
-*.crt
-*.p12
-*.jks
-keystore.*
-
-*.tmp
-*.temp
-*.swp
-*.swo
-*~
-
-spring-boot-devtools.properties
-
-*.db
-*.sqlite
-*.sqlite3
-
-.dockerignore
-docker-compose.override.yml
-.docker/
-
-*.bak
-*.backup
-*.orig
-
-/docs/build/

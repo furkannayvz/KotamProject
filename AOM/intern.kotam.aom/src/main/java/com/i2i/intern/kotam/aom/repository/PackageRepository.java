@@ -16,12 +16,6 @@ public class  PackageRepository implements PackageRepositoryOracle {
 
     private final DataSource dataSource;
 
-    /*
-    public PackageRepository() {
-        // Manuel olarak kendi DataSource'unu oluştur
-        this.dataSource = DataSourceConfig.customDataSource();
-    }*/
-
     @Autowired
     public PackageRepository(DataSource dataSource) {
         this.dataSource = dataSource;

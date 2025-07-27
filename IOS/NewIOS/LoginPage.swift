@@ -171,7 +171,7 @@ struct LoginPage: View {
     }
     
     func loginUser() {
-        guard let url = URL(string: "http://34.14.39.115/api/customer/login") else { return }
+        guard let url = URL(string: "http://34.32.107.243:8080/api/customer/login") else { return }
         let msisdn = phoneNumber.filter { $0.isNumber }
         let body: [String: Any] = [
             "msisdn": msisdn,

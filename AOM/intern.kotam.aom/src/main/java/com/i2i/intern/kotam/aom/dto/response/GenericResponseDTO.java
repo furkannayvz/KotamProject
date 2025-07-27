@@ -1,6 +1,5 @@
 package com.i2i.intern.kotam.aom.dto.response;
 
-
 public class GenericResponseDTO {
     private boolean success;
     private String message;

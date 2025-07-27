@@ -1,5 +1,3 @@
-
-
 package com.i2i.intern.kotam.aom.service;
 
 import org.i2i.kotam.HazelcastMWOperation;
@@ -11,9 +9,9 @@ public class HazelcastService {
 
      // * Hazelcast'e MSISDN gönderir.
      // *
-     // * @param msisdn Gönderilecek müşteri MSISDN
-     // * @param value  Değer (örneğin: "active", "verified" vb.)
-     // * @return işlem sonucu mesajı
+     // * msisdn Gönderilecek müşteri MSISDN
+     // * value  Değer (örneğin: "active", "verified" vb.)
+     // * return işlem sonucu mesajı
 
     public String sendMsisdnToHazelcast(String msisdn, String value) {
         return HazelcastMWOperation.put(msisdn, value);

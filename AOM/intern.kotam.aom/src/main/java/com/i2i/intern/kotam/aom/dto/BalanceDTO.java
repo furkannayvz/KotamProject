@@ -1,14 +1,31 @@
 package com.i2i.intern.kotam.aom.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.sql.Timestamp;
 
+@Schema(description = "Kullanıcının mevcut bakiye durumunu temsil eder")
 public class BalanceDTO {
+
+    @Schema(description = "Bakiye ID", example = "101")
     private Long balanceId;
+
+    @Schema(description = "MSISDN (telefon numarası)", example = "5551234567")
     private String msisdn;
+
+    @Schema(description = "Kalan veri (MB)", example = "2500")
     private Long leftData;
+
+    @Schema(description = "Kalan SMS", example = "500")
     private Long leftSms;
+
+    @Schema(description = "Kalan dakika", example = "400")
     private Long leftMinutes;
+
+    @Schema(description = "Paketin alındığı tarih", example = "2024-07-26T10:30:00Z")
     private Timestamp getsDate;
+
+    @Schema(description = "Kullanıcının aktif paketi")
     private PackageDTO packageEntity;
 
     // Getters and Setters

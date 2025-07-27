@@ -16,8 +16,6 @@ public interface PackageRepositoryOracle {
 
     Optional<PackageEntity> getPackageDetailsByIdCursor(Long id);
 
-
-
     Optional<Long> getPackageIdByName(String name);
 }
 

@@ -65,7 +65,6 @@ public class BalanceRepositoryVoltdb implements BalanceRepositoryVoltdbBase {
         return Optional.empty();
     }
 
-
     @Override
     public boolean insertBalance(Balance balance) {
         try {

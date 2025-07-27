@@ -50,16 +50,6 @@ public class VoltDbOperator {
             formattedJson.put("BAL_LEFT_SMS", balanceJson.getInt("BAL_LEFT_SMS"));
             formattedJson.put("BAL_LEFT_DATA", balanceJson.getInt("BAL_LEFT_DATA"));
 
-
-            /*
-            formattedJson.put("balanceId", balanceJson.getInt("BALANCE_ID"));
-            formattedJson.put("msisdn", balanceJson.getString("MSISDN"));
-            formattedJson.put("packageId", balanceJson.getInt("PACKAGE_ID"));
-            formattedJson.put("leftMinutes", balanceJson.getInt("BAL_LEFT_MINUTES"));
-            formattedJson.put("leftSms", balanceJson.getInt("BAL_LEFT_SMS"));
-            formattedJson.put("leftData", balanceJson.getInt("BAL_LEFT_DATA"));
-            //formattedJson.put("getsDate", balanceJson.getString("SDATE").replace(" ", "T")); */
-
             System.out.println("Gönderilen JSON:\n" + formattedJson.toString(4));
 
             URL url = new URL("http://34.142.55.240:8081/balances");

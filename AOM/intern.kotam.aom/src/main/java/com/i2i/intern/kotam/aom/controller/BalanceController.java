@@ -3,14 +3,17 @@ package com.i2i.intern.kotam.aom.controller;
 import com.i2i.intern.kotam.aom.dto.BalanceDTO;
 import com.i2i.intern.kotam.aom.dto.PackageDTO;
 import com.i2i.intern.kotam.aom.dto.request.BalanceRequestDTO;
+import com.i2i.intern.kotam.aom.dto.response.BalanceResponseDTO;
 import com.i2i.intern.kotam.aom.model.Balance;
 import com.i2i.intern.kotam.aom.model.PackageEntity;
 import com.i2i.intern.kotam.aom.service.BalanceServiceOracle;
 import com.i2i.intern.kotam.aom.service.BalanceServiceVoltdb;
 import com.i2i.intern.kotam.aom.service.PackageServiceOracle;
 import com.i2i.intern.kotam.aom.service.HazelcastService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -19,6 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/balances")
+@Tag(name = "Bakiye İşlemleri", description = "Bakiye ekleme ve kontrol işlemleri")
 public class BalanceController {
 
     private final PackageServiceOracle packageServiceOracle;
@@ -74,12 +78,10 @@ public class BalanceController {
         dto.setLeftSms(balance.getLeftSms());
         dto.setLeftMinutes(balance.getLeftMinutes());
         dto.setGetsDate(balance.getsDate());
-        dto.setPackageEntity(pkgDto); // ✅ Artık doğru dolu
+        dto.setPackageEntity(pkgDto);
 
         return ResponseEntity.ok(dto);
     }
-
-
 
     // POST /api/balances
     @PostMapping("/balances")
@@ -137,7 +139,22 @@ public class BalanceController {
         }
     }
 
-
+    @GetMapping("/balances/{msisdn}")
+    public ResponseEntity<BalanceResponseDTO> getBalance(@PathVariable String msisdn) {
+        Optional<Balance> balanceOpt = balanceServiceVoltdb.getBalanceByMsisdn(msisdn);
+        if (balanceOpt.isPresent()) {
+            Balance b = balanceOpt.get();
+            BalanceResponseDTO dto = new BalanceResponseDTO();
+            dto.setMsisdn(b.getMsisdn());
+            dto.setRemainingMinutes(b.getRemainingMinutes().intValue());
+            dto.setRemainingSms(b.getRemainingSms().intValue());
+            dto.setRemainingData(b.getRemainingData().intValue());
+            dto.setSDate(b.getsDate());
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     //  GET /api/balances/max-id
     @GetMapping("/max-id")

@@ -1,36 +1,40 @@
 package com.i2i.intern.kotam.aom.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "PACKAGE_DETAILS")
+@Schema(description = "Paket veritabanı varlığını temsil eder")
 public class PackageEntity implements Serializable {
 
     @Id
     @Column(name = "ID")
+    @Schema(description = "Paketin benzersiz kimliği", example = "1")
     private Long id;
 
     @Column(name = "NAME", nullable = false, unique = true, length = 100)
+    @Schema(description = "Paket adı", example = "Sosyal Paket")
     private String name;
 
     @Column(name = "DATA_QUOTA")
+    @Schema(description = "Veri kotası (MB)", example = "5000")
     private Long dataQuota;
 
     @Column(name = "SMS_QUOTA")
+    @Schema(description = "SMS kotası", example = "1000")
     private Long smsQuota;
 
     @Column(name = "MINUTES_QUOTA")
+    @Schema(description = "Dakika kotası", example = "500")
     private Long minutesQuota;
 
     @Column(name = "PRICE")
+    @Schema(description = "Paket fiyatı (₺)", example = "39.90")
     private Double price;
 
-    /*
-    @Column(name = "IS_ACTIVE")
-    private Boolean isActive;
-    */
-
+    @Schema(description = "Paket geçerlilik süresi (gün)", example = "30")
     @Column(name = "PERIOD") // Yeni alan
     private Integer period;
 
@@ -46,8 +50,8 @@ public class PackageEntity implements Serializable {
         //this.isActive = isActive;
         this.period = period;
     }
-// Getters & Setters
 
+    // Getters & Setters
     public Long getId() {
         return id;
     }
@@ -96,15 +100,6 @@ public class PackageEntity implements Serializable {
         this.price = price;
     }
 
-    /*
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }*/
-
     public Integer getPeriod() {
         return period;
     }
@@ -120,5 +115,4 @@ public class PackageEntity implements Serializable {
     public String getPackageName() {
         return this.name;
     }
-
 }

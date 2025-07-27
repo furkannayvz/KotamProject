@@ -173,7 +173,7 @@ struct ForgotPasswordPage: View {
 
     // Şifre sıfırlama isteği fonksiyonu
     func sendForgotPasswordRequest() {
-        guard let url = URL(string: "http://34.14.39.115/api/auth/forgot-password") else { return }
+        guard let url = URL(string: "http://34.32.107.243:8080/api/auth/forgot-password") else { return }
         let body: [String: Any] = [
             "nationalId": tcKimlik,
             "email": email

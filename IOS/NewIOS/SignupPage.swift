@@ -334,7 +334,7 @@ struct SignupPage: View {
     }
 
     func registerUser() {
-        guard let url = URL(string: "http://34.14.39.115/api/customer/register") else { return }
+        guard let url = URL(string: "http://34.32.107.243:8080/api/customer/register") else { return }
         let msisdn = phone.filter { $0.isNumber }
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         components.queryItems = [

@@ -17,8 +17,6 @@ public class BalanceServiceOracle {
         this.balanceRepository = balanceRepository;
     }
 
-
-
     public boolean insertCustomerPackage(String msisdn, Long package_id) {
         return balanceRepository.insertCustomerPackage( msisdn, package_id);
     }

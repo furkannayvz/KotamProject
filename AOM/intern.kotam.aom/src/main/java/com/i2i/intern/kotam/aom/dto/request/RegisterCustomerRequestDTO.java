@@ -1,7 +1,5 @@
 package com.i2i.intern.kotam.aom.dto.request;
 
-
-
 public class RegisterCustomerRequestDTO {
     private String msisdn;
     private String name;

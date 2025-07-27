@@ -1,14 +1,32 @@
 package com.i2i.intern.kotam.aom.dto;
 
-public class PackageDTO {
-    private Long id;
-    private int dataQuota;
-    private int smsQuota;
-    private int minutesQuota;
-    private double price;
-    private int period;
-    private String packageName;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "API'de kullanılan paket bilgilerinin DTO modeli")
+public class PackageDTO {
+
+    @Schema(description = "Paket ID", example = "2")
+    private Long id;
+
+    @Schema(description = "Veri kotası (MB)", example = "5000")
+    private int dataQuota;
+
+    @Schema(description = "SMS kotası", example = "1000")
+    private int smsQuota;
+
+    @Schema(description = "Dakika kotası", example = "500")
+    private int minutesQuota;
+
+    @Schema(description = "Paket fiyatı (₺)", example = "39.90")
+    private double price;
+
+    @Schema(description = "Paket süresi (gün)", example = "30")
+    private int period;
+
+    @Schema(description = "Paket adı", example = "Sosyal Paket")
+    private String packageName;
+    
+   // Getter and Setter
     public Long getId() {
         return id;
     }

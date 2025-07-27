@@ -2,14 +2,24 @@ package com.i2i.intern.kotam.aom.dto.request;
 
 // istemciden (frontend/UI) gelen bilgileri sunucuya (backend) taşımak için kullanılır.
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Şifre sıfırlama işlemi için gönderilen bilgiler")
 public class ResetPasswordRequestDTO {
-        private String email;
-        private String code;
-        private String newPassword;
-        private String nationalId;
-        private String confirmPassword;
+    @Schema(description = "Kullanıcının e-posta adresi", example = "zeliha@example.com")
+    private String email;
 
+    @Schema(description = "E-posta ile gönderilen doğrulama kodu", example = "864312")
+    private String code;
 
+    @Schema(description = "Yeni şifre", example = "YeniSifre123!")
+    private String newPassword;
+
+    @Schema(description = "T.C. kimlik numarası", example = "12345678901")
+    private String nationalId;
+
+    @Schema(description = "Yeni şifrenin tekrarı", example = "YeniSifre123!")
+    private String confirmPassword;
 
     // Getter ve Setter metodları
 
@@ -52,7 +62,4 @@ public class ResetPasswordRequestDTO {
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
-
 }
-
-

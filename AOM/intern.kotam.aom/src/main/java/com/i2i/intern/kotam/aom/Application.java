@@ -114,7 +114,6 @@ public class Application {
 	}
 
 	/*
-
 	@Bean
 	public CommandLineRunner testVoltConnection(VoltDbOperator voltDbOperator) {
 		return args -> {
@@ -127,22 +126,6 @@ public class Application {
 		};
 	}*/
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 public PackageEntity(Long id, String name, Long dataQuota, Long smsQuota, Long minutesQuota, Double price, Boolean isActive, Integer period) {

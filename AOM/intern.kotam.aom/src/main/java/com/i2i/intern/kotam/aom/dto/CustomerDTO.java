@@ -1,7 +1,5 @@
 package com.i2i.intern.kotam.aom.dto;
 
-
-
 public class CustomerDTO {
     private String msisdn;
     private String name;

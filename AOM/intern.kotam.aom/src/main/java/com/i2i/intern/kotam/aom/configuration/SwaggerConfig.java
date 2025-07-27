@@ -1,19 +1,25 @@
 package com.i2i.intern.kotam.aom.configuration;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import org.springframework.context.annotation.Bean;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Kotam AOM Projesi için OpenAPI konfigürasyonu
+ * Swagger arayüzü /swagger-ui.html adresinden erişilebilir
+ */
+@OpenAPIDefinition(
+        info = @Info(
+                contact = @Contact(
+                        name = "GitHub Proje Linki",
+                        url = "https://github.com/furkannayvz/KotamProject",
+                        email = "zelihapolat111@gmail.com"
+                ),
+                description = "Kotam AOM projesi için geliştirilen REST API dökümantasyonu.",
+                title = "Kotam AOM - API Dokümantasyonu",
+                version = "1.0"
+        )
+)
 @Configuration
-public class SwaggerConfig {
-
-    @Bean
-    public OpenAPI apiInfo() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("KOTAM API")
-                        .version("1.0")
-                        .description("Kullanıcı yönetimi ve paket işlemleri için API dokümantasyonu"));
-    }
-}
+public class SwaggerConfig { }
