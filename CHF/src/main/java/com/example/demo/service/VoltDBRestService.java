@@ -107,7 +107,6 @@ public class VoltDBRestService {
                 .onErrorReturn(new PackageDetailsDto(0, 0, 0, null));
     }
 
-
     public Mono<String> updateSmsBalance(String msisdn, int sms) {
         return voltdbWebClient
                 .put()
@@ -147,7 +146,6 @@ public class VoltDBRestService {
                 .timeout(Duration.ofSeconds(10));
     }
 
-    // Other existing methods (unchanged for brevity)
     public Mono<String> getCustomerEmail(String msisdn) {
         return voltdbWebClient
                 .get()
@@ -173,7 +171,6 @@ public class VoltDBRestService {
     }
 
     public Mono<String> getPackageByMsisdn(String msisdn) {
-        // This is the raw endpoint, getPackageDetailsByMsisdn above is preferred
         return voltdbWebClient
                 .get()
                 .uri("/packages/by-msisdn/{msisdn}", msisdn)
