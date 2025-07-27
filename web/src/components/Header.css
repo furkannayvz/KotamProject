@@ -1,0 +1,106 @@
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  background: #0e3970;
+  color: #fff;
+  padding: 0 32px;
+  box-shadow: 0 2px 8px #eaeaea33;
+  z-index: 10;
+  position: sticky;
+  top: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.header-logo {
+  height: 36px;
+  width: auto;
+  margin-right: 12px;
+  display: block;
+}
+
+.header-title {
+  font-weight: 900;
+  font-size: 24px;
+  letter-spacing: 1.5px;
+  color: #fff;
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-username {
+  font-size: 17px;
+  font-weight: 600;
+  color: #e0e9fc;
+  margin-right: 4px;
+  letter-spacing: 0.5px;
+}
+
+.header-avatar {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: 2px solid #e0e9fc;
+  object-fit: cover;
+  cursor: pointer;
+  background: #fff;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.header-avatar:hover {
+  border: 2.5px solid #fff;
+  box-shadow: 0 0 0 2px #1a477c44;
+}
+
+@media (max-width: 700px) {
+  .main-header {
+    height: 54px;
+    padding: 0 12px;
+  }
+  .header-title {
+    font-size: 17px;
+  }
+  .header-logo {
+    height: 24px;
+    margin-right: 6px;
+  }
+  .header-avatar {
+    height: 28px;
+    width: 28px;
+  }
+  .header-username {
+    font-size: 14px;
+  }
+}
