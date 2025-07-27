@@ -1,0 +1,220 @@
+.register-root {
+  min-height: 100vh;
+  display: flex;
+  background: #f8f9fb;
+  font-family: 'Inter', sans-serif;
+  align-items: stretch; /* Dikeyde uzasın, sağ taraf boş kalmasın */
+}
+
+.register-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%; 
+}
+
+.register-box {
+  max-width: 420px;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  padding: 56px 48px;
+  margin-right: auto;
+  box-shadow: 0 2px 8px #eee;
+}
+
+.kotam-logo {
+  height: 56px;
+  width: auto;
+  margin-bottom: 24px;
+  display: block;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.register-box h1 {
+  font-weight: 900;
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+
+.register-box label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+  margin-top: 14px;
+}
+
+.register-box input,
+.register-box select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  background: #0e3970;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  margin-top: 24px;
+  font-size: 16px;
+}
+
+.login-area {
+  margin-top: 24px;
+  font-size: 15px;
+  text-align: center;
+}
+
+.login-link {
+  background: none;
+  border: none;
+  color: #0e3970;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.error {
+  color: red;
+  margin-top: 8px;
+}
+.success {
+  color: green;
+  margin-top: 8px;
+}
+
+/* --- Sağ Taraftaki Gradient ve İçerik --- */
+.register-right {
+  flex: 1.1;
+  min-width: 420px;
+  min-height: 100vh; /* Tam ekran yüksekliği */
+  background: linear-gradient(90deg, #2d3e6e 0%, #30406e 50%, #1a2448 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* İçeriği yukarıdan başlat */
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Yazı içeriği üstte başlasın ve padding sağlansın */
+.register-right-content {
+  padding: 60px 60px 0 60px;
+  z-index: 2;
+  position: relative;
+}
+
+/* Büyük başlık */
+.register-right-content h2 {
+  font-family: 'Rubik', 'Inter', sans-serif;
+  font-size: 38px;
+  margin: 60px 0 0 0;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+
+.register-right-content .bold {
+  font-weight: 800;
+  display: block;
+}
+
+.register-right-content .light {
+  font-weight: 300;
+  font-size: 32px;
+  opacity: 0.92;
+  display: block;
+  margin-top: 4px;
+  margin-left: 2px;
+}
+
+/* Icon için */
+.register-right-icon {
+  position: absolute;
+  bottom: 44px;
+  right: 36px;
+  width: 430px;
+  height: auto;
+  opacity: 0.13;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .register-right {
+    min-width: 0;
+    width: 100%;
+    height: 360px;
+    flex: unset;
+    padding: 0;
+  }
+  .register-right-icon {
+    width: 260px;
+    bottom: 12px;
+    right: 10px;
+  }
+  .register-right-content {
+    padding: 28px 18px 0 18px;
+  }
+}
+
+@media (max-width: 900px) {
+  .register-root {
+    flex-direction: column;
+  }
+  .register-right {
+    display: none;
+  }
+  .register-left {
+    align-items: center;
+    padding: 0;
+  }
+}
+
+.password-strength-indicator {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  background-color: #f7f8fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+.strength-criterion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #888;
+  transition: all 0.2s;
+}
+
+.strength-criterion .checkmark {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.strength-criterion.valid {
+  color: #000;
+  font-weight: 500;
+}
+
+.strength-criterion.valid .checkmark {
+  color: #4CAF50; /* Yeşil onay rengi */
+}
