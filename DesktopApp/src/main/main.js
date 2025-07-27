@@ -3,7 +3,7 @@ const path = require('node:path');
 
 let mainWindow;
 
-const BASE_URL = 'http://34.14.39.115/api'; 
+const BASE_URL = 'http://34.32.107.243:8080/api'; 
 
 function createWindow() {
     mainWindow = new BrowserWindow({
