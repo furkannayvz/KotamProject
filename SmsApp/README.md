@@ -5,7 +5,7 @@ Gereksinimler
 
 Java JDK (Versiyon 21 veya üzeri)
 
-Bir Java IDE'si (Örn: IntelliJ IDEA, Eclipse)
+Bir Java IDE'si 
 
 Uygulamayı Çalıştırma
 
