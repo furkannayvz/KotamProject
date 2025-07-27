@@ -1,0 +1,1131 @@
+login page
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter/material.dart';
+import 'package:loginn/passwordcriteria.dart';
+import 'package:loginn/user_storage.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController phoneController = TextEditingController();
+
+  late final TextEditingController passwordController;
+
+  void login(BuildContext context) async {
+    final inputPhone = UserStorage.normalizePhone(phoneController.text.trim());
+    final inputPassword = passwordController.text.trim();
+
+    final savedUser = await UserStorage.getUser();
+
+    if (savedUser != null &&
+        savedUser['phone'] == inputPhone &&
+        savedUser['password'] == inputPassword) {
+      // Başarılı giriş
+      Navigator.pushReplacementNamed(context, '/personal');
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Invalid phone or password')));
+    }
+
+    /* final phone = phoneController.text.trim();
+    final password = passwordController.text.trim();
+
+    final valid = await UserStorage.validateLogin(phone, password);
+
+    if (valid) {
+      Navigator.pushReplacementNamed(context, '/personal');
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Invalid phone or password!')));
+    }*/
+  }
+
+  late FocusNode _passwordFocusNode;
+
+  bool _isValid = false;
+  String password = '';
+
+  bool showPasswordCard = false;
+  @override
+  void initState() {
+    super.initState();
+    passwordController = TextEditingController();
+    _passwordFocusNode = FocusNode();
+
+    // Listener'lar initState içinde tanımlanmalı!
+    passwordController.addListener(() {
+      setState(() {
+        password = passwordController.text;
+      });
+    });
+
+    _passwordFocusNode.addListener(() {
+      setState(() {
+        showPasswordCard = _passwordFocusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    _passwordFocusNode.dispose(); // 🔴 Eksikti
+    super.dispose();
+  }
+
+  bool get hasMinLength => password.length >= 8;
+  bool get hasUppercase => password.contains(RegExp(r'[A-Z]'));
+  bool get hasNumber => password.contains(RegExp(r'[0-9]'));
+  bool get hasSymbol => password.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'));
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: 80,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 38.0),
+          child: Image.asset("images/image 10.png"),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "WELCOME TO ",
+                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    "KOTAM",
+                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Track every GB you use,every minute you\nspend with Kotam.",
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Phone Number",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              TextField(
+                controller: phoneController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+
+                  hintText: 'Your Phone Number',
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Text(
+                    "Password",
+
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              TextField(
+                controller: passwordController,
+                focusNode: _passwordFocusNode,
+                obscureText: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+
+                  hintText: ' Your Password',
+                ),
+              ),
+              if (showPasswordCard)
+                Card(
+                  elevation: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            PasswordCriteriaRow(
+                              text: "At least 8 \ncharacters",
+                              isValid: hasMinLength,
+                            ),
+                            PasswordCriteriaRow(
+                              text: "At least one \nuppercase",
+                              isValid: hasUppercase,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            PasswordCriteriaRow(
+                              text: "At least one \nnumber",
+                              isValid: hasNumber,
+                            ),
+                            PasswordCriteriaRow(
+                              text: "At least one \nsymbol",
+                              isValid: hasSymbol,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/Forgot");
+                    },
+                    child: Text(
+                      "Forgot Password",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              GestureDetector(
+                onTap: () => login(context),
+                child: Container(
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 4, 18, 29),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text("Login", style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/register'),
+                child: Container(
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 33, 39, 44),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+personalpage
+// ignore_for_file: library_private_types_in_public_api
+
+import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'user_storage.dart';
+
+class PersonalPage extends StatefulWidget {
+  const PersonalPage({super.key});
+
+  @override
+  _PersonalPageState createState() => _PersonalPageState();
+}
+
+class _PersonalPageState extends State<PersonalPage> {
+  Map<String, dynamic>? userData;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
+
+  Future<void> loadUser() async {
+    final data = await UserStorage.getUser();
+    setState(() {
+      userData = data;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (userData == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text('Personal Information')),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final tariff = userData!['selectedTariff'];
+    final fullName = "${userData!['name']} ${userData!['surname']}";
+
+    double percentUsed = 1; // Sabit demo oranı
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/");
+            },
+            icon: Icon(Icons.no_accounts),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Welcome\n$fullName",
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+
+              SizedBox(height: 24),
+              Text(
+                "Remaining Usage",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+
+              SizedBox(height: 16),
+              usageIndicator(
+                "Data",
+                percentUsed,
+                "${tariff['dataQuota'] / 1000} GB",
+              ),
+              usageIndicator(
+                "Minutes",
+                percentUsed,
+                "${tariff['minutesQuota']} dk",
+              ),
+              usageIndicator("SMS", percentUsed, "${tariff['smsQuota']} SMS"),
+
+              SizedBox(height: 24),
+              Text(
+                "My Plan",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    // Üst Mavi Başlık Alanı
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 13, 29, 53),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: EdgeInsets.all(16),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${tariff['packageName']}",
+
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "Expires on November 12",
+                              style: TextStyle(color: Colors.white70),
+                            ),
+                            Text(
+                              "(24 days left)",
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+
+                    // Kalan gün ve tarih barı
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "  24 days left",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: LinearProgressIndicator(
+                          value: 0.8, // örnek oran
+                          minHeight: 8,
+                          backgroundColor: Colors.grey[300],
+                          color: Colors.blue.shade800,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "12/07/2025  ",
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      ),
+                    ),
+
+                    SizedBox(height: 16),
+
+                    // Alt kısım: SMS, Data, Minutes
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        infoTile("SMS", tariff['smsQuota'].toString()),
+                        infoTile("Data", "${tariff['dataQuota'] / 1000} GB"),
+                        infoTile("Minute", tariff['minutesQuota'].toString()),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget usageIndicator(String label, double percent, String quotaText) {
+    final tariff = userData!['selectedTariff']["name"];
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+        ),
+
+        child: Row(
+          children: [
+            CircularPercentIndicator(
+              startAngle: 180,
+              radius: 50.0,
+              lineWidth: 10.0,
+              percent: percent,
+              center: Text("${(percent * 100).toStringAsFixed(1)}%"),
+              progressColor: Colors.indigo[900],
+              backgroundColor: Color(0xFFE0E0E0),
+              circularStrokeCap: CircularStrokeCap.round,
+            ),
+            SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "$tariff "
+                  "$label",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                Text(quotaText),
+                Text("Expires on November 12"),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget infoTile(String label, String value) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        Text(label),
+      ],
+    );
+  }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+tariffpage
+// ignore_for_file: library_private_types_in_public_api, avoid_print, use_build_context_synchronously
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'user_storage.dart';
+
+class TariffPage extends StatefulWidget {
+  const TariffPage({super.key});
+
+  @override
+  _TariffPageState createState() => _TariffPageState();
+}
+
+class _TariffPageState extends State<TariffPage> {
+  List<dynamic> tariffs = [];
+  dynamic selectedTariff;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTariffs();
+  }
+
+  Future<void> fetchTariffs() async {
+    final url = Uri.parse('http://34.14.39.115/api/packages/all');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        setState(() {
+          tariffs = json.decode(response.body);
+        });
+      }
+    } catch (e) {
+      print('Hata: $e');
+    }
+  }
+
+  void selectTariffAndContinue(BuildContext context) async {
+    if (selectedTariff == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please select a tariff')));
+      return;
+    }
+
+    final userData = await UserStorage.getUser();
+    if (userData == null) return;
+
+    userData['selectedTariff'] = selectedTariff;
+
+    await UserStorage.saveUser(userData);
+
+    Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: tariffs.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                SizedBox(height: 50),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset("images/image 10.png", width: 120),
+
+                    IconButton(
+                      icon: Icon(Icons.logout),
+                      onPressed: () async {
+                        await UserStorage.clearUser();
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/',
+                          (_) => false,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "My Tariff",
+                      style: TextStyle(
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      "Choose the perfect plan for your needs",
+                      style: TextStyle(color: Colors.grey[700], fontSize: 18),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: tariffs.length,
+                    itemBuilder: (context, index) {
+                      final tariff = tariffs[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () => setState(() => selectedTariff = tariff),
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 16),
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              gradient: LinearGradient(
+                                colors: selectedTariff == tariff
+                                    ? [Color(0xFF264973), Color(0xFF3B74B0)]
+                                    : [Color(0xFF1F2F5F), Color(0xFF2B468B)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 8,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  tariff['name'],
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  '${tariff['price']}₺/month',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(height: 12),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    _tariffDetailDot(
+                                      "📶 ${tariff['dataQuota']} data",
+                                    ),
+                                    _tariffDetailDot(
+                                      "📞 ${tariff['minutesQuota']} minutes",
+                                    ),
+                                    _tariffDetailDot(
+                                      "✉️ ${tariff['smsQuota']} sms",
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 4.0,
+                    horizontal: 8,
+                  ),
+
+                  child: GestureDetector(
+                    onTap: () => selectTariffAndContinue(context),
+
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 4, 18, 29),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Sign Up",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 4.0,
+                    horizontal: 8,
+                  ),
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 33, 39, 44),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Back",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+
+  Widget _tariffDetailDot(String text) {
+    return Row(
+      children: [
+        Icon(Icons.circle, size: 8, color: Colors.white70),
+        SizedBox(width: 6),
+        Text(text, style: TextStyle(color: Colors.white)),
+      ],
+    );
+  }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+main
+import 'package:flutter/material.dart';
+import 'package:loginn/forgotpassword.dart';
+import 'package:loginn/newpassword.dart';
+import 'package:loginn/pinput.dart';
+import 'login_page.dart';
+import 'register_page.dart';
+import 'tariff_page.dart';
+import 'personal_page.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
+
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
+      title: 'Flutter Demo',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginPage(),
+        '/register': (context) => RegisterPage(),
+        '/tariff': (context) => TariffPage(),
+        '/personal': (context) => PersonalPage(),
+        '/NewPassword': (context) => NewPassword(),
+        '/Forgot': (context) => ForgotPassword(),
+        '/pinput': (context) => CodeInputPage(),
+      },
+    );
+  }
+}
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+registerpage
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter/material.dart';
+import 'package:loginn/passwordcriteria.dart';
+import 'user_storage.dart';
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage>
+    with SingleTickerProviderStateMixin {
+  final TextEditingController nameController = TextEditingController();
+
+  final TextEditingController surnameController = TextEditingController();
+
+  final TextEditingController nationalIdController = TextEditingController();
+
+  final TextEditingController emailController = TextEditingController();
+
+  final TextEditingController phoneController = TextEditingController();
+
+  late TextEditingController passwordController;
+
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
+  late AnimationController controller;
+  final _controllers = List.generate(6, (_) => TextEditingController());
+  final packages = ['Summer Package', 'Winter Package'];
+  String? selectedPackage;
+  bool _isValid = false;
+  bool showPasswordCard = false;
+  String password = '';
+
+  late FocusNode _passwordFocusNode;
+  @override
+  void initState() {
+    super.initState();
+    passwordController = TextEditingController();
+    _passwordFocusNode = FocusNode();
+    // Şifre değişimini dinleme
+    passwordController.addListener(() {
+      setState(() {
+        password = passwordController.text;
+      });
+    });
+    _passwordFocusNode.addListener(() {
+      setState(() {
+        showPasswordCard = _passwordFocusNode.hasFocus;
+      });
+    });
+    controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 5))
+          ..addListener(() {
+            setState(() {});
+          })
+          ..repeat(reverse: true);
+    // Listener: her değişiklikte karakter sayısını kontrol eder
+    _controllers[4].addListener(() {
+      final textLength = _controllers[4].text.length;
+      final isNowValid = textLength >= 8;
+
+      // Değer değiştiyse setState çağır
+      if (isNowValid != _isValid) {
+        setState(() {
+          _isValid = isNowValid;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  Widget uyari(String uyari) {
+    return Text(uyari);
+  }
+
+  void saveAndGoToTariff(BuildContext context) async {
+    var snackbar = ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Lütfen tüm alanları doldurunuz")));
+
+    final normalizedPhone = UserStorage.normalizePhone(
+      phoneController.text.trim(),
+    );
+    String name = nameController.text.trim();
+    String surName = surnameController.text.trim();
+    String nationalId = nationalIdController.text.trim();
+    String email = emailController.text.trim();
+    String phone = normalizedPhone;
+    String passwordC = passwordController.text.trim();
+    final userData = {
+      'name': name,
+      'surname': surName,
+      'nationalId': nationalId,
+      'email': email,
+      'phone': phone,
+      'password': password,
+    };
+
+    await UserStorage.saveUser(userData);
+    if (name.isEmpty ||
+        surName.isEmpty ||
+        nationalId.isEmpty ||
+        nationalId.contains(RegExp(r'[A-Z]')) ||
+        email.isEmpty ||
+        !email.contains("@") ||
+        phone.isEmpty ||
+        passwordC.isEmpty ||
+        (passwordC != confirmPasswordController.text.trim())) {
+      snackbar;
+    } else {
+      Navigator.pushNamed(context, '/tariff');
+    }
+  }
+
+  @override
+  bool get hasMinLength => password.length >= 8;
+  bool get hasUppercase => password.contains(RegExp(r'[A-Z]'));
+  bool get hasNumber => password.contains(RegExp(r'[0-9]'));
+  bool get hasSymbol => password.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'));
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(children: [Image.asset("images/image 10.png")]),
+
+            Row(
+              children: [
+                Text(
+                  "Sign Up",
+                  style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Text(
+                  "Name",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                ),
+              ],
+            ),
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(
+                labelText: "Your Name",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Text(
+                  "Surname",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                ),
+              ],
+            ),
+            TextField(
+              controller: surnameController,
+              decoration: InputDecoration(
+                labelText: 'Your Surname',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Text(
+                  "National ID",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                ),
+              ],
+            ),
+            TextField(
+              controller: nationalIdController,
+              decoration: InputDecoration(
+                labelText: 'Your National ID',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Text(
+                  "Email",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                ),
+              ],
+            ),
+            TextField(
+              controller: emailController,
+              decoration: InputDecoration(
+                labelText: 'Your Email',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Text(
+                  "Phone",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                ),
+              ],
+            ),
+            TextField(
+              controller: phoneController,
+              decoration: InputDecoration(
+                labelText: 'Your Phone',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Text(
+                  "Password",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                ),
+              ],
+            ),
+            TextField(
+              controller: passwordController,
+              focusNode: _passwordFocusNode,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Your Password',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            Card(
+              elevation: 4,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      PasswordCriteriaRow(
+                        text: "At least 8 characters",
+                        isValid: hasMinLength,
+                      ),
+                      PasswordCriteriaRow(
+                        text: "At least one uppercase",
+                        isValid: hasUppercase,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      PasswordCriteriaRow(
+                        text: "At least one number",
+                        isValid: hasNumber,
+                      ),
+                      PasswordCriteriaRow(
+                        text: "At least one symbol",
+                        isValid: hasSymbol,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            Row(
+              children: [
+                Text(
+                  "Confirm Password",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                ),
+              ],
+            ),
+            TextField(
+              controller: confirmPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Your Confirm Password',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            GestureDetector(
+              onTap: () => saveAndGoToTariff(context),
+              child: Container(
+                height: 60,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 4, 18, 29),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(
+                    "Continue",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                height: 60,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 33, 39, 44),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(
+                    "Back to login",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+           
+          ],
+        ),
+      ),
+    );
+  }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
