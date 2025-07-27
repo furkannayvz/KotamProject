@@ -82,7 +82,7 @@ public class RandomGenerator {
     // MSISDN listeden rastgele seçim
     public static String randomMsisdn() {
         if (allMsisdn.isEmpty()) {
-            System.out.println("⚠ Hazelcast'ten MSISDN listesi çekilmemiş ya da boş.");
+            System.out.println("Hazelcast'ten MSISDN listesi çekilmemiş ya da boş.");
             return "5000000000";
         }
 

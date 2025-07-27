@@ -53,8 +53,8 @@ public class CommandHandler {
                 case "printStats"    -> statsManager.printStats();
                 case "resetStats"    -> statsManager.resetStats();
 
-                case "updateMsisdn"  -> RandomGenerator.fetchMsisdn();  //update the list of msisdn from Hazelcast
-                case "testRandom"    -> printTransTest();               //print a random transaction to test values
+                case "updateMsisdn"  -> RandomGenerator.fetchMsisdn();  
+                case "testRandom"    -> printTransTest();               
                 default -> System.out.println("unrecognized command...");
             }
         }

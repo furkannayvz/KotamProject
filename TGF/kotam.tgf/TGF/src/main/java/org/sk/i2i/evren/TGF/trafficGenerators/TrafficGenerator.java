@@ -9,37 +9,41 @@ import org.sk.i2i.evren.TGF.management.StatsManager;
 import org.sk.i2i.evren.TGF.util.Clock;
 import org.sk.i2i.evren.TGF.util.RandomGenerator;
 import org.sk.i2i.evren.TGF.dto.VoiceTransaction;
+import org.sk.i2i.evren.TGF.service.CHFClientService;
 
 public class TrafficGenerator implements Runnable{
     private final TransType type;
     private final ActorRef actor;
     private boolean isGenerate = true;
-
     private final StatsManager statsManager;
     private final DelayManager delayManager;
+    private final CHFClientService chfClient;
 
     /**
      * @param type type of transaction to be generated
      * @param actor akka actor which will send transactions
      * @param delayManager manages the delay time between transactions
      * @param statsManager manages stats of generator, counts transactions and dropped transactions
+     * @param chfClient client to send HTTP requests to CHF (can be null)
      */
-    public TrafficGenerator(TransType type, ActorRef actor, StatsManager statsManager, DelayManager delayManager) {
-
+    public TrafficGenerator(TransType type, ActorRef actor, StatsManager statsManager, DelayManager delayManager, CHFClientService chfClient) {
         this.type = type;
         this.actor = actor;
         this.statsManager = statsManager;
         this.delayManager = delayManager;
+        this.chfClient = chfClient;
+    }
+
+    public TrafficGenerator(TransType type, ActorRef actor, StatsManager statsManager, DelayManager delayManager) {
+        this(type, actor, statsManager, delayManager, null);
     }
 
     @Override
     public void run() {
-
         statsManager.resetStats();
         isGenerate = true;
 
         while(isGenerate) {
-
             sendTransaction();
             statsManager.incrementCounter(type);
             Clock.delay(delayManager.getDelay(type));
@@ -49,7 +53,6 @@ public class TrafficGenerator implements Runnable{
     }
 
     private void sendTransaction() {
-
         String msisdn = RandomGenerator.randomMsisdn();
         int location = RandomGenerator.randomLocation();
 
@@ -60,7 +63,12 @@ public class TrafficGenerator implements Runnable{
                         location,
                         RandomGenerator.randomDataUsage(),
                         RandomGenerator.randomRatingGroup());
+                
                 actor.tell(trans, ActorRef.noSender());
+                
+                if (chfClient != null) {
+                    chfClient.sendDataCharging(trans);
+                }
             }
             case VOICE -> {
                 VoiceTransaction trans =  new VoiceTransaction(
@@ -69,7 +77,12 @@ public class TrafficGenerator implements Runnable{
                         location,
                         RandomGenerator.randomDuration()
                 );
+                
                 actor.tell(trans, ActorRef.noSender());
+                
+                if (chfClient != null) {
+                    chfClient.sendVoiceCharging(trans);
+                }
             }
             case SMS -> {
                 SmsTransaction trans = new SmsTransaction(
@@ -77,15 +90,17 @@ public class TrafficGenerator implements Runnable{
                         RandomGenerator.randomMsisdn(),
                         location
                 );
+                
                 actor.tell(trans, ActorRef.noSender());
+                
+                if (chfClient != null) {
+                    chfClient.sendSmsCharging(trans);
+                }
             }
-        }//end switch
+        }
     }
 
-    //set isGenerate bool to false to break the generation loop
     public void stop() {
         this.isGenerate = false;
     }
-
-
 }
