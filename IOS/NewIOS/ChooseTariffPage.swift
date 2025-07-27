@@ -119,7 +119,7 @@ struct ChooseTariffPage: View {
     
     func fetchTariffs() {
         isLoading = true
-        guard let url = URL(string: "http://34.14.39.115/api/packages/all") else {
+        guard let url = URL(string: "http://34.32.107.243:8080/api/packages/all") else {
             isLoading = false
             return
         }
@@ -163,7 +163,7 @@ struct ChooseTariffPage: View {
     }
 
     func assignPackageToUser(msisdn: String, packageId: Int) {
-        guard let url = URL(string: "http://34.14.39.115/api/balances/balances") else { return }
+        guard let url = URL(string: "http://34.32.107.243:8080/api/balances/balances") else { return }
         let msisdnFiltered = msisdn.filter { $0.isNumber }
         let body: [String: Any] = [
             "MSISDN": msisdnFiltered,

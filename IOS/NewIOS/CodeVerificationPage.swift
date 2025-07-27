@@ -106,7 +106,7 @@ struct CodeVerificationPage: View {
             showAlert = true
             return
         }
-        guard let url = URL(string: "http://34.14.39.115/api/auth/verify-code") else { return }
+        guard let url = URL(string: "http://34.32.107.243:8080/api/auth/verify-code") else { return }
         let body: [String: Any] = [
             "email": email,
             "code": codeString

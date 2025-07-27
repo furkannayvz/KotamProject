@@ -281,7 +281,7 @@ struct RemainingUsagePage: View {
     func fetchUserData() {
         guard let msisdn = msisdn else { return }
         isLoading = true
-        let urlString = "http://34.14.39.115/api/balances/\(msisdn)"
+        let urlString = "http://34.32.107.243:8080/api/balances/\(msisdn)"
         guard let url = URL(string: urlString) else { return }
         URLSession.shared.dataTask(with: url) { data, response, error in
             DispatchQueue.main.async {
@@ -308,7 +308,7 @@ struct RemainingUsagePage: View {
     func fetchCustomerData() {
         guard let msisdn = msisdn else { return }
         isCustomerLoading = true
-        let urlString = "http://34.14.39.115/api/customer/\(msisdn)"
+        let urlString = "http://34.32.107.243:8080/api/customer/\(msisdn)"
         guard let url = URL(string: urlString) else { return }
         URLSession.shared.dataTask(with: url) { data, response, error in
             DispatchQueue.main.async {
